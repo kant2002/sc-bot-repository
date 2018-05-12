@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <LangVersion>Latest</LangVersion>
+
+    <ToolCommandName>bwbot</ToolCommandName>
+    <PackageId>bwbot-cli</PackageId>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <Import Project="..\BotManager.Shared\BotManager.Shared.projitems" Label="Shared" />
+
+</Project>
