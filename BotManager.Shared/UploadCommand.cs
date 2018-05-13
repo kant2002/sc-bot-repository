@@ -41,7 +41,7 @@ namespace BotManager
                 var responseObject = await repository.UploadAsync(this.BotName, this.FileName);
                 if (responseObject.Status == 0)
                 {
-                    Console.WriteLine($"Server return error: {responseObject.Txt}");
+                    Console.WriteLine($"Server return error: {responseObject.Message}");
                     return 1;
                 }
 

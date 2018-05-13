@@ -1,41 +1,67 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SSCAITRepository.cs" company="Andrii Kurdiumov">
+// Copyright (c) Andrii Kurdiumov. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace BotRepository.Client
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Security;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// Class which provides access to SSCAIT bot repository.
+    /// </summary>
     public class SSCAITRepository
     {
         private readonly Uri uri;
         private readonly HttpClient client;
         private readonly CookieContainer cookieContainer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SSCAITRepository"/> class with given URI.
+        /// </summary>
+        /// <param name="uri">Uri address of the server where bot repository is hosted.</param>
         public SSCAITRepository(Uri uri)
         {
             this.uri = uri;
             this.cookieContainer = new CookieContainer();
-            var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
+            var handler = new HttpClientHandler() { CookieContainer = this.cookieContainer };
             this.client = new HttpClient(handler) { BaseAddress = this.uri };
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SSCAITRepository"/> class with given URI.
+        /// </summary>
+        /// <param name="uri">Uri address of the server where bot repository is hosted.</param>
         public SSCAITRepository(string uri)
             : this(new Uri(uri))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SSCAITRepository"/> class with SSCAIT address.
+        /// </summary>
         public SSCAITRepository()
             : this(new Uri("https://sscaitournament.com"))
         {
         }
 
-        public async Task<LoginResponse> LoginAsync(string login, string unsecurePassword)
+        /// <summary>
+        /// Performs login to the bot repository server.
+        /// </summary>
+        /// <param name="login">Login of the user. Use your email for SSCAIT server.</param>
+        /// <param name="unsecurePassword">Password of the user.</param>
+        /// <returns>A <see cref="Task"/> which provide inforamation about operation status.</returns>
+        public async Task<StatusResponse> LoginAsync(string login, string unsecurePassword)
         {
             var password = new SecureString();
             foreach (var c in unsecurePassword)
@@ -46,7 +72,13 @@ namespace BotRepository.Client
             return await this.LoginAsync(login, password).ConfigureAwait(false);
         }
 
-        public async Task<LoginResponse> LoginAsync(string login, SecureString password)
+        /// <summary>
+        /// Performs login to the bot repository server.
+        /// </summary>
+        /// <param name="login">Login of the user. Use your email for SSCAIT server.</param>
+        /// <param name="password">Password of the user.</param>
+        /// <returns>A <see cref="Task"/> which provide inforamation about operation status.</returns>
+        public async Task<StatusResponse> LoginAsync(string login, SecureString password)
         {
             var responseTask = SecurityUtils.DecryptSecureString(password, (decryptedPassword) =>
             {
@@ -72,7 +104,7 @@ namespace BotRepository.Client
             }
 
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var responseObject = JsonConvert.DeserializeObject<LoginResponse>(responseString);
+            var responseObject = JsonConvert.DeserializeObject<StatusResponse>(responseString);
             if (responseObject.Status == 0)
             {
                 return responseObject;
@@ -89,22 +121,40 @@ namespace BotRepository.Client
             return responseObject;
         }
 
-        public async Task<LoginResponse> UploadAsync(string botName, string botFile)
+        /// <summary>
+        /// Asynchronously upload bot.
+        /// </summary>
+        /// <param name="botName">Name of the bot on the SSCAIT server.</param>
+        /// <param name="botFile">Name of the file with bot content.</param>
+        /// <returns>A <see cref="Task"/> which provide inforamation about operation status.</returns>
+        public async Task<StatusResponse> UploadAsync(string botName, string botFile)
         {
             return await this.UploadAsync(botName, new ByteArrayContent(File.ReadAllBytes(botFile))).ConfigureAwait(false);
         }
 
-        public async Task<LoginResponse> UploadAsync(string botName, byte[] botBytes)
+        /// <summary>
+        /// Asynchronously upload bot.
+        /// </summary>
+        /// <param name="botName">Name of the bot on the SSCAIT server.</param>
+        /// <param name="botBytes">Bytes with bot archive.</param>
+        /// <returns>A <see cref="Task"/> which provide inforamation about operation status.</returns>
+        public async Task<StatusResponse> UploadAsync(string botName, byte[] botBytes)
         {
             return await this.UploadAsync(botName, new ByteArrayContent(botBytes)).ConfigureAwait(false);
         }
 
-        public async Task<LoginResponse> UploadAsync(string botName, Stream botStream)
+        /// <summary>
+        /// Asynchronously upload bot.
+        /// </summary>
+        /// <param name="botName">Name of the bot on the SSCAIT server.</param>
+        /// <param name="botStream">Stream with bot archive.</param>
+        /// <returns>A <see cref="Task"/> which provide inforamation about operation status.</returns>
+        public async Task<StatusResponse> UploadAsync(string botName, Stream botStream)
         {
             return await this.UploadAsync(botName, new StreamContent(botStream)).ConfigureAwait(false);
         }
 
-        private async Task<LoginResponse> UploadAsync(string botName, HttpContent botFileContent)
+        private async Task<StatusResponse> UploadAsync(string botName, HttpContent botFileContent)
         {
             var bwbotDirectory = Path.Combine(
                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -131,7 +181,7 @@ namespace BotRepository.Client
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var responseObject = JsonConvert.DeserializeObject<LoginResponse>(responseString);
+            var responseObject = JsonConvert.DeserializeObject<StatusResponse>(responseString);
             if (responseObject.Status == 0)
             {
                 return responseObject;

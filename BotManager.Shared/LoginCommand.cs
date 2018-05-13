@@ -45,7 +45,7 @@ namespace BotManager
                 var responseObject = await repository.LoginAsync(login, password);
                 if (responseObject.Status == 0)
                 {
-                    Console.WriteLine($"Server return error: {responseObject.Txt}");
+                    Console.WriteLine($"Server return error: {responseObject.Message}");
                     return 1;
                 }
 
@@ -66,6 +66,7 @@ namespace BotManager
 
             return 0;
         }
+
         private static SecureString GetHiddenConsoleInput()
         {
             var ss = new SecureString();

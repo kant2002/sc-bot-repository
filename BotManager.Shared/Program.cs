@@ -34,7 +34,6 @@ upload - Upload the bot binary to server
                     return 1;
 
             }
-
         }
     }
 }

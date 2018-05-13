@@ -10,9 +10,18 @@
     <Authors>Andrey Kurdiumov</Authors>
     <RepositoryType>git</RepositoryType>
     <Description>API client for the SSCAIT</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta007">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
 </Project>

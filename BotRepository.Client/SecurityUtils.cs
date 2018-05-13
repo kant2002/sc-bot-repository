@@ -1,23 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SecurityUtils.cs" company="Andrii Kurdiumov">
+// Copyright (c) Andrii Kurdiumov. All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace BotRepository.Client
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security;
+
+    /// <summary>
+    /// Security utilities.
+    /// </summary>
     internal static class SecurityUtils
     {
          /// <summary>
          /// Passes decrypted password String pinned in memory to Func delegate scrubbed on return.
          /// </summary>
-         /// <typeparam name="T">Generic type returned by Func delegate</typeparam>
-         /// <param name="action">Func delegate which will receive the decrypted password pinned in memory as a String object</param>
-         /// <returns>Result of Func delegate</returns>
+         /// <typeparam name="T">Generic type returned by Func delegate.</typeparam>
+         /// <param name="secureString">Secure string on which operation should be performed.</param>
+         /// <param name="action">Func delegate which will receive the decrypted password pinned in memory as a String object.</param>
+         /// <returns>Result of Func delegate.</returns>
         public static T DecryptSecureString<T>(SecureString secureString, Func<string, T> action)
         {
             var insecureStringPointer = IntPtr.Zero;
-            var insecureString = String.Empty;
+            var insecureString = string.Empty;
             var gcHandler = GCHandle.Alloc(insecureString, GCHandleType.Pinned);
 
             try
@@ -37,10 +45,10 @@ namespace BotRepository.Client
         }
 
         /// <summary>
-        /// Runs DecryptSecureString with support for Action to leverage void return type
+        /// Runs DecryptSecureString with support for Action to leverage void return type.
         /// </summary>
-        /// <param name="secureString"></param>
-        /// <param name="action"></param>
+        /// <param name="secureString">Secure string on which operation should be performed.</param>
+        /// <param name="action">Function which will receive the decrypted password pinned in memory as a String object.</param>
         public static void DecryptSecureString(SecureString secureString, Action<string> action)
         {
             DecryptSecureString<int>(secureString, (s) =>
@@ -49,6 +57,5 @@ namespace BotRepository.Client
                 return 0;
             });
         }
-
     }
 }
