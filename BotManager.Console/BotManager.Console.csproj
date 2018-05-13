@@ -5,6 +5,7 @@
     <TargetFramework>net462</TargetFramework>
     <LangVersion>Latest</LangVersion>
     <AssemblyName>bwbot</AssemblyName>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

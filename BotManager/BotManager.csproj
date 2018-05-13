@@ -8,6 +8,7 @@
     <LangVersion>Latest</LangVersion>
 
     <ToolCommandName>bwbot</ToolCommandName>
+    <Version>0.0.1</Version>
     <PackageId>bwbot-cli</PackageId>
 
   </PropertyGroup>
