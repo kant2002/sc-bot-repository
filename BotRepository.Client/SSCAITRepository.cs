@@ -43,7 +43,7 @@ namespace BotRepository.Client
                 password.AppendChar(c);
             }
 
-            return await this.LoginAsync(login, password);
+            return await this.LoginAsync(login, password).ConfigureAwait(false);
         }
 
         public async Task<LoginResponse> LoginAsync(string login, SecureString password)
@@ -57,7 +57,7 @@ namespace BotRepository.Client
                 });
                 return this.client.PostAsync("https://sscaitournament.com/users/login_submit.php", content);
             });
-            var response = await responseTask;
+            var response = await responseTask.ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
             if (!response.Headers.TryGetValues("Set-Cookie", out var cookies))
@@ -71,7 +71,7 @@ namespace BotRepository.Client
                 throw new InvalidOperationException($"Authentication error. Make sure that you enter correct password");
             }
 
-            var responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var responseObject = JsonConvert.DeserializeObject<LoginResponse>(responseString);
             if (responseObject.Status == 0)
             {
@@ -91,6 +91,21 @@ namespace BotRepository.Client
 
         public async Task<LoginResponse> UploadAsync(string botName, string botFile)
         {
+            return await this.UploadAsync(botName, new ByteArrayContent(File.ReadAllBytes(botFile))).ConfigureAwait(false);
+        }
+
+        public async Task<LoginResponse> UploadAsync(string botName, byte[] botBytes)
+        {
+            return await this.UploadAsync(botName, new ByteArrayContent(botBytes)).ConfigureAwait(false);
+        }
+
+        public async Task<LoginResponse> UploadAsync(string botName, Stream botStream)
+        {
+            return await this.UploadAsync(botName, new StreamContent(botStream)).ConfigureAwait(false);
+        }
+
+        private async Task<LoginResponse> UploadAsync(string botName, HttpContent botFileContent)
+        {
             var bwbotDirectory = Path.Combine(
                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                    ".bwbot");
@@ -109,14 +124,13 @@ namespace BotRepository.Client
 
             var content = new MultipartFormDataContent();
             content.Add(new StringContent(botName), "user");
-            var botFileContent = new ByteArrayContent(File.ReadAllBytes(botFile));
             botFileContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-zip-compressed");
             content.Add(botFileContent, "bot_binary", "bot.zip");
 
-            var response = await this.client.PostAsync("https://sscaitournament.com/users/users/new_binary_submit.php", content);
+            var response = await this.client.PostAsync("https://sscaitournament.com/users/users/new_binary_submit.php", content).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var responseObject = JsonConvert.DeserializeObject<LoginResponse>(responseString);
             if (responseObject.Status == 0)
             {

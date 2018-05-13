@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.0.1</Version>
+    <PackageLicenseUrl>https://github.com/kant2002/sc-bot-repository/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/kant2002/sc-bot-repository/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kant2002/sc-bot-repository/</RepositoryUrl>
+    <PackageTags>Starcraft, SSCAIT, bots</PackageTags>
+    <Authors>Andrey Kurdiumov</Authors>
+    <RepositoryType>git</RepositoryType>
+    <Description>API client for the SSCAIT</Description>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
