@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)LoginCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LoginResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UploadCommand.cs" />
   </ItemGroup>

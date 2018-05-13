@@ -10,12 +10,24 @@
     <ToolCommandName>bwbot</ToolCommandName>
     <Version>0.0.1</Version>
     <PackageId>bwbot-cli</PackageId>
+    <PackageLicenseUrl>https://github.com/kant2002/sc-bot-repository/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/kant2002/sc-bot-repository/</PackageProjectUrl>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/kant2002/sc-bot-repository/</RepositoryUrl>
+    <PackageTags>Starcraft, SSCAIT, bots</PackageTags>
+    <Authors>Andrey Kurdiumov</Authors>
+    <RepositoryType>git</RepositoryType>
+    <Description>CLI for the SSCAIT</Description>
 
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.3" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BotRepository.Client\BotRepository.Client.csproj" />
   </ItemGroup>
 
   <Import Project="..\BotManager.Shared\BotManager.Shared.projitems" Label="Shared" />

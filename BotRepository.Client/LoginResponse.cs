@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BotManager
+namespace BotRepository.Client
 {
     public class LoginResponse
     {
